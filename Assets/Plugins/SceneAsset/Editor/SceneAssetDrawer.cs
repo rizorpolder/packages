@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace SFAsset.Editor
+namespace SceneAsset.Editor
 {
-    [CustomPropertyDrawer(typeof(SceneAsserAttribute))]
+    [CustomPropertyDrawer(typeof(SceneAssetAttribute))]
     public class SceneAssetDrawer : PropertyDrawer
     {
         // A helper warning label when the user puts the attribute above a non string type.
@@ -38,7 +38,7 @@ namespace SFAsset.Editor
         {
             property = GetProperty(property);
 
-            if (property.type != typeof(SceneAsset.SceneAsset).Name)
+            if (property.type != typeof(SceneAsset).Name)
             {
                 // Create a rect for our label
                 Rect labelPosition = position;
@@ -71,7 +71,7 @@ namespace SFAsset.Editor
         protected virtual Type ObjectType()
         {
             // Get our attribute
-            SceneAsserAttribute attr = attribute as SceneAsserAttribute;
+            SceneAssetAttribute attr = attribute as SceneAssetAttribute;
             // Return back the type.
             return attr?.Type;
         }
@@ -82,7 +82,7 @@ namespace SFAsset.Editor
 
             if (objectType == typeof(Scene))
             {
-                objectType = typeof(SceneAsset.SceneAsset);
+                objectType = typeof(SceneAsset);
             }
 
             // First get our value

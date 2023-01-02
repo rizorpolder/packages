@@ -8,7 +8,7 @@ namespace SceneAsset.Attributes.AssetPath
         /// only be applied to string types. 
         /// </summary>
         [AttributeUsage(AttributeTargets.Field)]
-        public class SceneAsserAttribute : PropertyAttribute
+        public class SceneAssetAttribute : PropertyAttribute
         {
             private SceneAssetPathTypes m_PathType;
             private Type m_Type;
@@ -26,7 +26,7 @@ namespace SceneAsset.Attributes.AssetPath
             /// <summary>
             /// Creates the default instance of AssetPathAttribute
             /// </summary>
-            public SceneAsserAttribute(Type type)
+            public SceneAssetAttribute(Type type)
             {
                 m_Type = type; 
                 m_PathType = SceneAssetPathTypes.Project;
