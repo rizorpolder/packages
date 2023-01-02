@@ -82,7 +82,7 @@ namespace SFAsset.Editor
 
             if (objectType == typeof(Scene))
             {
-                objectType = typeof(UnityEditor.SceneAsset);
+                objectType = typeof(SceneAsset);
             }
 
             // First get our value
