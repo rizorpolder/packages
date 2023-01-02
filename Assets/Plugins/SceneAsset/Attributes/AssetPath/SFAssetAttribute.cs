@@ -1,22 +1,22 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SceneAsset.Attributes.AssetPath
+namespace SFAsset.Attributes.AssetPath
 {
         /// <summary>
         /// We limit this attributes to fields and only allow one. Should
         /// only be applied to string types. 
         /// </summary>
         [AttributeUsage(AttributeTargets.Field)]
-        public class SceneAssetAttribute : PropertyAttribute
+        public class SFAssetAttribute : PropertyAttribute
         {
-            private SceneAssetPathTypes m_PathType;
+            private SFAssetPathTypes m_PathType;
             private Type m_Type;
 
             /// <summary>
             /// Gets the type of asset path this attribute is watching.
             /// </summary>
-            public SceneAssetPathTypes PathType => m_PathType;
+            public SFAssetPathTypes PathType => m_PathType;
 
             /// <summary>
             /// Gets the type of asset this attribute is expecting.
@@ -26,10 +26,10 @@ namespace SceneAsset.Attributes.AssetPath
             /// <summary>
             /// Creates the default instance of AssetPathAttribute
             /// </summary>
-            public SceneAssetAttribute(Type type)
+            public SFAssetAttribute(Type type)
             {
                 m_Type = type; 
-                m_PathType = SceneAssetPathTypes.Project;
+                m_PathType = SFAssetPathTypes.Project;
             }
     }
 }

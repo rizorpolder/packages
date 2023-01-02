@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-namespace SceneAsset.Attributes.AssetPath
+namespace SFAsset.Attributes.AssetPath
 {
-    public static class SceneAssetPathUtils
+    public static class SFAssetPathUtils
     {
         private const string RESOURCES_FOLDER_NAME = "/Resources/";
 
@@ -12,19 +12,19 @@ namespace SceneAsset.Attributes.AssetPath
         /// </summary>
         /// <param name="assetPath"></param>
         /// <returns>Type of asset Resources Or Bundle</returns>
-        public static SceneAssetPathTypes GetAssetPathType(string assetPath)
+        public static SFAssetPathTypes GetAssetPathType(string assetPath)
         {
             if (string.IsNullOrEmpty(assetPath))
             {
-                return SceneAssetPathTypes.None;
+                return SFAssetPathTypes.None;
             }
 
             if (assetPath.Contains("Resources/"))
             {
-                return SceneAssetPathTypes.Resources;
+                return SFAssetPathTypes.Resources;
             }
 
-            return SceneAssetPathTypes.Project;
+            return SFAssetPathTypes.Project;
         }
 
         public static string GetAssetName(string projectPath)

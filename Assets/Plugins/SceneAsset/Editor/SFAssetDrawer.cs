@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using SceneAsset.Attributes.AssetPath;
+using SFAsset.Attributes.AssetPath;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace SceneAsset.Editor
+namespace SFAsset.Editor
 {
-    [CustomPropertyDrawer(typeof(SceneAssetAttribute))]
-    public class SceneAssetDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SFAssetAttribute))]
+    public class SFAssetDrawer : PropertyDrawer
     {
         // A helper warning label when the user puts the attribute above a non string type.
         private const string m_InvalidTypeLabel = "Attribute invalid for type ";
@@ -23,7 +23,7 @@ namespace SceneAsset.Editor
         /// <summary>
         /// Invoked when unity creates our drawer. 
         /// </summary>
-        public SceneAssetDrawer()
+        public SFAssetDrawer()
         {
             m_References = new Dictionary<string, Object>();
         }
@@ -38,7 +38,7 @@ namespace SceneAsset.Editor
         {
             property = GetProperty(property);
 
-            if (property.type != typeof(SceneAsset).Name)
+            if (property.type != typeof(SFAsset).Name)
             {
                 // Create a rect for our label
                 Rect labelPosition = position;
@@ -71,7 +71,7 @@ namespace SceneAsset.Editor
         protected virtual Type ObjectType()
         {
             // Get our attribute
-            SceneAssetAttribute attr = attribute as SceneAssetAttribute;
+            SFAssetAttribute attr = attribute as SFAssetAttribute;
             // Return back the type.
             return attr?.Type;
         }
@@ -82,7 +82,7 @@ namespace SceneAsset.Editor
 
             if (objectType == typeof(Scene))
             {
-                objectType = typeof(SceneAsset);
+                objectType = typeof(UnityEditor.SceneAsset);
             }
 
             // First get our value

@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-namespace SceneAsset
+namespace SFAsset
 {
     [Serializable]
-    public struct SceneAsset
+    public struct SFAsset
     {
         /// <summary>
         /// Returns path to asset in Project space
