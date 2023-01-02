@@ -41,16 +41,18 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Plugins\SceneAsset\Attributes\AssetPath\SceneAsserAttribute.cs" />
      <Compile Include="Assets\Plugins\SceneAsset\Editor\SceneAssetDrawer.cs" />
+     <Compile Include="Assets\Plugins\SceneAsset\Runtime\SceneAsset.cs" />
+     <Compile Include="Assets\Plugins\SceneAsset\Attributes\AssetPath\SceneAsserAttribute.cs" />
      <Compile Include="Assets\Plugins\SceneAsset\Attributes\AssetPath\SceneAssetPathUtils.cs" />
-     <Compile Include="Assets\Plugins\SceneAsset\SceneAsset.cs" />
      <Compile Include="Assets\Plugins\SceneAsset\Attributes\AssetPath\SceneAssetPathTypes.cs" />
      <Folder Include="Assets\Plugins\SceneAsset" />
      <None Include="Assets\Plugins\SceneAsset\SceneAsset.asmdef" />
      <Folder Include="Assets\Plugins\SceneAsset\Attributes" />
+     <Folder Include="Assets\Plugins\SceneAsset\Runtime" />
      <Folder Include="Assets\Plugins\SceneAsset\Editor" />
      <Folder Include="Assets\Plugins\SceneAsset\Attributes\AssetPath" />
+     <None Include="Assets\Plugins\SceneAsset\package.json" />
      <Reference Include="UnityEngine">
      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
      </Reference>
