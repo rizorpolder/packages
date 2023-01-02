@@ -41,17 +41,16 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\SceneAsset\Attributes\AssetPath\SceneAssetAttribute.cs" />
-     <Compile Include="Assets\Scripts\SceneAsset\Editor\SceneAssetDrawer.cs" />
-     <Compile Include="Assets\Scripts\SceneAsset\Attributes\AssetPath\SceneAssetPathUtils.cs" />
-     <Compile Include="Assets\Scripts\SceneAsset\SceneAsset.cs" />
-     <Compile Include="Assets\Scripts\SceneAsset\Attributes\AssetPath\SceneAssetPathTypes.cs" />
-     <None Include="Assets\Scripts\SceneAsset\package.json" />
-     <Folder Include="Assets\Scripts\SceneAsset\Attributes" />
-     <Folder Include="Assets\Scripts\SceneAsset" />
-     <None Include="Assets\Scripts\SceneAsset\SceneAsset.asmdef" />
-     <Folder Include="Assets\Scripts\SceneAsset\Editor" />
-     <Folder Include="Assets\Scripts\SceneAsset\Attributes\AssetPath" />
+     <Compile Include="Assets\Plugins\SceneAsset\Attributes\AssetPath\SceneAsserAttribute.cs" />
+     <Compile Include="Assets\Plugins\SceneAsset\Editor\SceneAssetDrawer.cs" />
+     <Compile Include="Assets\Plugins\SceneAsset\Attributes\AssetPath\SceneAssetPathUtils.cs" />
+     <Compile Include="Assets\Plugins\SceneAsset\SceneAsset.cs" />
+     <Compile Include="Assets\Plugins\SceneAsset\Attributes\AssetPath\SceneAssetPathTypes.cs" />
+     <Folder Include="Assets\Plugins\SceneAsset" />
+     <None Include="Assets\Plugins\SceneAsset\SceneAsset.asmdef" />
+     <Folder Include="Assets\Plugins\SceneAsset\Attributes" />
+     <Folder Include="Assets\Plugins\SceneAsset\Editor" />
+     <Folder Include="Assets\Plugins\SceneAsset\Attributes\AssetPath" />
      <Reference Include="UnityEngine">
      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
      </Reference>
