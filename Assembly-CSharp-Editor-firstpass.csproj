@@ -41,8 +41,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Plugins\SceneAsset\Editor\SceneAssetDrawer.cs" />
-     <Folder Include="Assets\Plugins\SceneAsset\Editor" />
+     <Compile Include="Assets\Plugins\Editor\ManagerAudioEditor.cs" />
+     <Folder Include="Assets\Plugins\Editor" />
      <Reference Include="UnityEngine">
      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
      </Reference>
@@ -870,6 +870,10 @@
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{ef4dd598-e56f-a6b1-6d88-aff78126e90b}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
+    <ProjectReference Include="SceneAsset.csproj">
+      <Project>{b0797616-5f17-87f4-0faa-83231b27f1f1}</Project>
+      <Name>SceneAsset</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
