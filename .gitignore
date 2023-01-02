@@ -23,3 +23,5 @@ UserSettings/Layouts/default-2021.dwlt
 fbg.log
 UserSettings/EditorUserSettings.asset
 *.csproj
+UserSettings
+*.sln
