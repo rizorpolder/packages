@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Plugins.AudioManager.Runtime.Core.Manager;
-using Plugins.AudioManager.Runtime.Extensions;
+using AudioManager.Runtime.Core.Manager;
+using AudioManager.Runtime.Extensions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
+namespace AudioManager.Runtime.Core.ManagerAudioConfig
 {
 	[AttributeSettingsTitle("Audio System")]
 	[CreateAssetMenu(fileName = "SettingsManagerAudio", menuName = "Project/SettingsManagerAudio")]
@@ -52,6 +52,9 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 		private string[] metaMusic;
 
 		[SerializeField]
+		private string[] coreMusic;
+
+		[SerializeField]
 		private KeyValueMusicWrapper[] ambientSounds;
 
 		[SerializeField]
@@ -61,11 +64,20 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 		[SerializeField]
 		private KeyValueMusicWrapper[] emotionsSounds;
 
+		[field: SerializeField] public bool CanPlayUnfocused { get; private set; } = true;
+
 		private readonly List<string> _excludedList = new();
+		private AudioList audioList;
 		private bool isManagerAudioEnabled;
 
 		private List<SoundHolder> sounds;
 		private Dictionary<string, SoundHolder> soundsMap;
+
+		public string SoundsPath => soundsPath;
+
+		public string SaveDataPath => saveDataPath;
+
+		public string TAudioPath => tAudioPath;
 
 		public bool IfManagerAudioEnabled()
 		{
@@ -83,6 +95,7 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 
 			if (audioFilesJson != null)
 			{
+				audioList = JsonUtility.FromJson<AudioList>(audioFilesJson.ToString());
 				UpdateAudioMixerMusicVolume();
 				UpdateAudioMixerSoundVolume();
 			}
@@ -124,6 +137,11 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 		public string GetRandomMetaMusic()
 		{
 			return metaMusic.GetRandom();
+		}
+
+		public string GetRandomCoreMusic()
+		{
+			return coreMusic.GetRandom();
 		}
 
 		public string GetExclusiveRandomMetaMusic()
@@ -184,6 +202,41 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 			return setting.GetAudio();
 		}
 
+		public void GetAudioClip(string tAudio, Action<SettingsAudioInstance> callback)
+		{
+			if (string.IsNullOrEmpty(tAudio))
+			{
+				callback(null);
+				return;
+			}
+
+			SoundHolder setting = null;
+			var count = sounds.Count;
+			for (var i = 0; i < count; i++)
+				if (sounds[i].tAudio == tAudio)
+				{
+					setting = sounds[i];
+					break;
+				}
+
+			if (setting == null)
+			{
+				setting = new SoundHolder {tAudio = tAudio};
+				sounds.Add(setting);
+			}
+
+			var audio = setting.GetAudio();
+			if (audio == null)
+			{
+				Debug.LogWarning("NO AUDIO FILE: " + tAudio);
+				callback(null);
+			}
+			else
+			{
+				callback(audio);
+			}
+		}
+
 		public void UnLoadAudio(string tAudio)
 		{
 			for (var i = sounds.Count - 1; i > -1; i--)
@@ -194,6 +247,22 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 					if (soundsMap.ContainsKey(soundId))
 						soundsMap.Remove(soundId);
 				}
+		}
+
+		public string GetPathToFile(string tAudio)
+		{
+			if (audioList != null)
+			{
+				var audioName = tAudio;
+
+				var audios = audioList.audios;
+				var count = audioList.audios.Length;
+				for (var i = 0; i < count; i++)
+					if (audios[i].name == audioName)
+						return "Settings/Audio/" + audios[i].path + "/" + audios[i].name;
+			}
+
+			return "";
 		}
 
 #if UNITY_EDITOR
@@ -326,9 +395,14 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 				var fileInfo = info.GetFiles("*.*", SearchOption.AllDirectories);
 				foreach (var file in fileInfo)
 				{
-					if (file.Name.Contains(".meta")) continue;
+					if (file.Name.Contains(".meta"))
+						continue;
 
 					var name = Path.GetFileNameWithoutExtension(file.Name);
+
+					if (string.IsNullOrEmpty(name))
+						continue;
+
 					var extension = file.Extension;
 					var directory = file.FullName;
 					directory = directory.Replace(@"\", @"/");
@@ -344,18 +418,22 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 					directory = Path.ChangeExtension(directory, null);
 					var audio = audios.FirstOrDefault(a => a.name == name);
 					if (audio != null)
+					{
 						Debug.LogWarning(
 							$"Sound: {audio.name} already added. \r\n prev: {audio.path}  new {directory} \r\n\r\n");
+					}
 					else
-						audios = audios.Add(
-							new AudioInfo
-							{
-								path = directory,
-								name = name,
-								extension = extension,
-								index = 0
-							}
-						);
+					{
+						var audioInfo = new AudioInfo
+						{
+							path = directory,
+							name = name,
+							extension = extension,
+							index = 0
+						};
+
+						audios = audios.Add(audioInfo);
+					}
 				}
 			}
 
@@ -420,11 +498,12 @@ namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
 			private void GenerateExtensions(ManagerAudioConfig managerAudioConfig)
 			{
 				var tAudioFile = new StringBuilder();
-				tAudioFile.Append("	using Plugins.AudioManager.Runtime.Core.Manager;{\r\n");
-				
+				tAudioFile.Append("	using AudioManager.Runtime.Core.Manager;\r\n");
+
 				tAudioFile.Append("	namespace Plugins.AudioManager.Runtime.Core{\r\n");
 				tAudioFile.Append("	\t public static class ManagerAudioExtensions{\r\n");
-				tAudioFile.Append("	\t\t public static void PlayAudioClip(this ManagerAudio manager, TAudio audio, float delayExtra = 0){\r\n");
+				tAudioFile.Append(
+					"	\t\t public static void PlayAudioClip(this ManagerAudio manager, TAudio audio, float delayExtra = 0){\r\n");
 				tAudioFile.Append("	\t\t\t manager.PlayAudioClip(audio.ToString(),delayExtra:delayExtra);; \r\n");
 				tAudioFile.Append("	\t\t\t}\r\n");
 				tAudioFile.Append("	\t\t}\r\n");

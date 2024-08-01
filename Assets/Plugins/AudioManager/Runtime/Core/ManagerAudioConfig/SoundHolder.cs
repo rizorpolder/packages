@@ -1,6 +1,6 @@
-﻿using Plugins.AudioManager.Runtime.Core.Manager;
+﻿using AudioManager.Runtime.Core.Manager;
 
-namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
+namespace AudioManager.Runtime.Core.ManagerAudioConfig
 {
 	internal class SoundHolder
 	{

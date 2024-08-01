@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
+namespace AudioManager.Runtime.Core.ManagerAudioConfig
 {
 	[Serializable]
 	public class AudioList

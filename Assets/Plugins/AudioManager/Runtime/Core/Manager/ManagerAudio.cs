@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Plugins.AudioManager.Runtime.Extensions;
+using AudioManager.Runtime.Extensions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Plugins.AudioManager.Runtime.Core.Manager
+namespace AudioManager.Runtime.Core.Manager
 {
 	public class ManagerAudio : MonoBehaviour
 	{
@@ -15,9 +15,14 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 		[SerializeField]
 		private ManagerAudioConfig.ManagerAudioConfig managerAudioConfig;
 
+		private bool _gameInFocus = true;
+
+		private PlayMusicData _interruptedByAppFocus;
+
 		private bool _isMetaMusicPlaying;
 		private string _lastPlayedAmbient = string.Empty;
-		private string _previousMetaMusic = string.Empty;
+		private string _previousMusic = string.Empty;
+		private IEnumerator _switchMusic;
 		private IDisposable _timer;
 
 		private List<AudioSource> audioSources;
@@ -33,6 +38,8 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 		private bool isDestroyed;
 
 		private GameObject managerMusicGameObject2DSounds;
+
+		public Action<float> OmCameraZoomChanged; //orho size
 
 		private Action preloadAudioDispatcherOnfinish;
 
@@ -123,7 +130,7 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 #if UNITY_EDITOR
 			if (!managerAudioConfig.IfDynamicListenerEnabled()) return;
 			for (var i = dynamicSettingsListenerList.Count - 1; i > -1; i--)
-				if (!dynamicSettingsListenerList[i].audioSource ||
+				if (dynamicSettingsListenerList[i].audioSource == null ||
 				    !dynamicSettingsListenerList[i].audioSource.isPlaying)
 				{
 					dynamicSettingsListenerList.RemoveAt(i);
@@ -139,8 +146,10 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 						var controllerAudio = dynamicSettings.GetControllerAudio();
 
 						audioSource.loop = settingsAudioInstance.loop;
+						audioSource.spatialBlend = settingsAudioInstance.is3D ? 1 : 0;
+						audioSource.maxDistance = settingsAudioInstance.maxDist3D;
 
-						if (!controllerAudio)
+						if (controllerAudio == null || !controllerAudio.IfCameraZoomDependence())
 							audioSource.volume = settingsAudioInstance.volume;
 
 						audioSource.outputAudioMixerGroup = settingsAudioInstance.audioMixer;
@@ -163,6 +172,17 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 			Clear();
 			isDestroyed = true;
 			_timer?.Dispose();
+		}
+
+		private void OnApplicationFocus(bool focus)
+		{
+			_gameInFocus = focus;
+
+			if (!_gameInFocus || _interruptedByAppFocus == null)
+				return;
+
+			PlayMusic(_interruptedByAppFocus.Name, _interruptedByAppFocus.Settings);
+			_interruptedByAppFocus = null;
 		}
 
 		private void InitializeInherit()
@@ -235,14 +255,26 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 		private AudioSource FindAudioSources(string tAudio)
 		{
 			var audioClip = managerAudioConfig.GetAudioClip(tAudio);
-			if (!audioClip) return null;
+			if (!audioClip)
+				return null;
+
+			if (AudioListener.pause) //paused by Yandex ads when going background
+				return audioSources.FirstOrDefault(s => s.clip == audioClip.audioClip);
 
 			var count = audioSources.Count;
 			for (var i = 0; i < count; i++)
-				if (audioSources[i].isPlaying && audioSources[i].clip == audioClip.audioClip
-				                              && !audioSourcesVolumeChangeList.Any(
-					                              x => x.audioSource == audioSources[i]))
-					return audioSources[i];
+			{
+				if (!audioSources[i].isPlaying)
+					continue;
+
+				if (audioSources[i].clip != audioClip.audioClip)
+					continue;
+
+				if (audioSourcesVolumeChangeList.Any(x => x.audioSource == audioSources[i]))
+					continue;
+
+				return audioSources[i];
+			}
 
 			return null;
 		}
@@ -310,7 +342,7 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 			newAudioSource.maxDistance = 40;
 			newAudioSource.rolloffMode = AudioRolloffMode.Linear;
 			newAudioSource.spread = 0;
-			newAudioSource.spatialBlend = 0.4f;
+			newAudioSource.spatialBlend = 1f;
 			source.audioSources.Add(newAudioSource);
 
 			return newAudioSource;
@@ -348,13 +380,20 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 			float speedInSeconds = 0,
 			float delay = 0)
 		{
-			if (!managerAudioConfig.GetEnabledMusicOnStart()) yield return null;
+			_interruptedByAppFocus = new PlayMusicData {Name = newClip};
+
+			var enabledMusicOnStart = managerAudioConfig.GetEnabledMusicOnStart();
+			if (!enabledMusicOnStart)
+				yield return null;
 
 			var source = FindAudioSources(currentClip);
 
 			if (source == null)
 			{
 				PlayAudioClip(newClip);
+				_switchMusic = null;
+				_previousMusic = newClip;
+				_interruptedByAppFocus = null;
 				yield break;
 			}
 
@@ -369,6 +408,9 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 			source.Play();
 
 			ChangeVolume(source, config.volume, speedInSeconds);
+			_switchMusic = null;
+			_previousMusic = newClip;
+			_interruptedByAppFocus = null;
 		}
 
 		public void PlayAudioClip(GameObject gameObject,
@@ -379,16 +421,25 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 		{
 			if (!managerAudioConfig.IfManagerAudioEnabled()) return;
 
-			var audioClip = managerAudioConfig.GetAudioClip(tAudio);
-			var audioSource = !isSmart ? GetAudioSource(gameObject) : GetAudioSource();
-			audioSource.clip = audioClip.audioClip;
-			audioSource.rolloffMode = AudioRolloffMode.Linear;
-			audioSource.spread = 0;
-			PlayAudioClipProcess(audioSource, audioClip, settings, delayExtra);
+			managerAudioConfig.GetAudioClip(tAudio,
+				delegate(SettingsAudioInstance audioClip)
+				{
+					if (audioClip != null)
+					{
+						var audioSource = !isSmart || audioClip.is3D ? GetAudioSource(gameObject) : GetAudioSource();
+						audioSource.clip = audioClip.audioClip;
+						audioSource.rolloffMode = AudioRolloffMode.Linear;
+						audioSource.spread = 0;
+						PlayAudioClipProcess(audioSource, audioClip, settings, delayExtra);
+					}
+				});
 		}
 
 		public void PlayAudioClip(string soundId, Settings settings = null, float delayExtra = 0)
 		{
+			if (!managerAudioConfig.CanPlayUnfocused && !_gameInFocus)
+				return;
+
 			if (!managerAudioConfig.IfManagerAudioEnabled())
 				return;
 
@@ -421,16 +472,34 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 			PlayAudioClip(_lastPlayedAmbient, new Settings {fadeIn = fade, loop = true});
 		}
 
+		public void PlayMusic(string music, Settings settings)
+		{
+			if (!managerAudioConfig.CanPlayUnfocused && !_gameInFocus)
+			{
+				_interruptedByAppFocus = new PlayMusicData {Name = music, Settings = settings};
+				return;
+			}
+
+			if (_switchMusic != null)
+				return;
+
+			const float fadeSpeed = 1f;
+			if (!string.IsNullOrEmpty(_previousMusic))
+			{
+				_switchMusic = SwitchAudioClip(_previousMusic, music, true, fadeSpeed);
+				StartCoroutine(_switchMusic);
+			}
+			else
+			{
+				PlayAudioClip(music, settings);
+				_previousMusic = music;
+			}
+		}
+
 		private void PlayRandomMetaMusic()
 		{
 			var tAudio = GetConfig().GetRandomMetaMusic();
-			var fadeSpeed = 2f;
-			if (!_previousMetaMusic.Equals(string.Empty))
-				//todo - UniRX?
-				StartCoroutine(SwitchAudioClip(_previousMetaMusic, tAudio, true, fadeSpeed));
-			else
-				PlayAudioClip(tAudio);
-			_previousMetaMusic = tAudio;
+			PlayMusic(tAudio, null);
 		}
 
 		public void PlayMetaMusic(float fadeIn = 0)
@@ -440,8 +509,11 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 
 		public void PlayMetaMusic(string key, float fadeIn = 0)
 		{
-			if (_isMetaMusicPlaying) return;
-			if (!managerAudioConfig.IfManagerAudioEnabled()) return;
+			if (_isMetaMusicPlaying)
+				return;
+
+			if (!managerAudioConfig.IfManagerAudioEnabled())
+				return;
 
 			StopAudioAll(fadeIn);
 			ChangeAmbientMusic(key);
@@ -454,14 +526,15 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 			Settings settings,
 			float delayExtra)
 		{
-			var volume = settings != null && settings.volume >= 0 ? settings.volume : settingsAudioInstance.volume;
-			var playDelay = settingsAudioInstance.delayTime + delayExtra;
-
-			audioSource.loop = settings != null ? settings.loop : settingsAudioInstance.loop;
-			audioSource.pitch = Random.Range(settingsAudioInstance.pitchMin, settingsAudioInstance.pitchMax);
 			audioSource.outputAudioMixerGroup = settingsAudioInstance.audioMixer;
 
-			if (settings != null && settings.fadeIn > 0)
+			var volume = settings is {volume: >= 0} ? settings.volume : settingsAudioInstance.volume;
+			var playDelay = settingsAudioInstance.delayTime + delayExtra;
+
+			audioSource.loop = settings?.loop ?? settingsAudioInstance.loop;
+			audioSource.pitch = Random.Range(settingsAudioInstance.pitchMin, settingsAudioInstance.pitchMax);
+
+			if (settings is {fadeIn: > 0})
 			{
 				audioSource.volume = 0;
 				ChangeVolume(audioSource, volume, settings.fadeIn, playDelay);
@@ -624,7 +697,7 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 			var audioClip = managerAudioConfig.GetAudioClip(tAudio);
 			if (!audioClip || !audioClip.loop) return;
 
-			if (isSmart)
+			if (isSmart && !audioClip.is3D)
 				StopAudio(tAudio, speedInSeconds, delay);
 			else
 				StopAudio(gameObject, tAudio, speedInSeconds, delay);
@@ -648,6 +721,11 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 		public void UnLoadAudio(params string[] tAudios)
 		{
 			foreach (var mType in tAudios) managerAudioConfig.UnLoadAudio(mType);
+		}
+
+		private bool IfSoundEnabled()
+		{
+			return managerAudioConfig.IfSoundEnabled();
 		}
 
 		public bool IfPlaying(string tAudio)
@@ -699,6 +777,12 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 		public bool IfDestroyed()
 		{
 			return isDestroyed;
+		}
+
+		public class PlayMusicData
+		{
+			public string Name;
+			public Settings Settings;
 		}
 	}
 }

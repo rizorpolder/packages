@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Random = UnityEngine.Random;
 
-namespace Plugins.AudioManager.Runtime.Extensions
+namespace AudioManager.Runtime.Extensions
 {
 	public class Enum<T> where T : struct, IConvertible
 	{

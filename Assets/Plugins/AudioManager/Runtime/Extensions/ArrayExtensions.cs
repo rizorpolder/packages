@@ -1,4 +1,4 @@
-﻿namespace Plugins.AudioManager.Runtime.Extensions
+﻿namespace AudioManager.Runtime.Extensions
 {
 	public static class ArrayExtensions
 	{

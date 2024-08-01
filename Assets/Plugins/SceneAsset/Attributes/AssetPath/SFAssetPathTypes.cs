@@ -1,9 +1,9 @@
 ﻿namespace SFAsset.Attributes.AssetPath
 {
-    public enum SFAssetPathTypes
-    {
-        None,
-        Project,
-        Resources
-    }
+	public enum SFAssetPathTypes
+	{
+		None,
+		Project,
+		Resources
+	}
 }

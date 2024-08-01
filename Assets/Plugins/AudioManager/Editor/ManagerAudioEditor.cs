@@ -1,10 +1,10 @@
-﻿using Plugins.AudioManager.Runtime.Core.Manager;
+﻿using AudioManager.Runtime.Core.Manager;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace Plugins.AudioManager.Editor
+namespace AudioManager.Editor
 {
 #if UNITY_EDITOR
 

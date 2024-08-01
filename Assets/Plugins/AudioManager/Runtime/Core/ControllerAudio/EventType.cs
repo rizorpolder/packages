@@ -1,4 +1,4 @@
-﻿namespace Plugins.AudioManager.Runtime.Core.ControllerAudio
+﻿namespace AudioManager.Runtime.Core.ControllerAudio
 {
 	internal enum EventTypes
 	{

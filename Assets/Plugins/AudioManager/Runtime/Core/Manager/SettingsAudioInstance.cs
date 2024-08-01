@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Plugins.AudioManager.Runtime.Core.Manager
+namespace AudioManager.Runtime.Core.Manager
 {
 	public class SettingsAudioInstance : ScriptableObject
 	{
@@ -25,6 +25,13 @@ namespace Plugins.AudioManager.Runtime.Core.Manager
 
 		[SerializeField] [Range(-3.0f, 3.0f)]
 		public float pitchMax;
+
+		[Header("3D")]
+		[SerializeField]
+		public bool is3D;
+
+		[SerializeField]
+		public float maxDist3D;
 
 		[Header("Others")]
 		[Space(10f)]

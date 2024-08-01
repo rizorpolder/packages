@@ -1,4 +1,4 @@
-﻿namespace Plugins.AudioManager.Runtime.Core.Manager
+﻿namespace AudioManager.Runtime.Core.Manager
 {
 	public class Settings
 	{

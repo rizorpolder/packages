@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Plugins.AudioManager.Runtime.Core.ManagerAudioConfig
+namespace AudioManager.Runtime.Core.ManagerAudioConfig
 {
 	internal class AudioInfoComparer : IComparer<AudioInfo>
 	{

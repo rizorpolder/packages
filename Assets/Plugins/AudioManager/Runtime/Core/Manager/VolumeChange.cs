@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.AudioManager.Runtime.Core.Manager
+namespace AudioManager.Runtime.Core.Manager
 {
 	internal class VolumeChange
 	{

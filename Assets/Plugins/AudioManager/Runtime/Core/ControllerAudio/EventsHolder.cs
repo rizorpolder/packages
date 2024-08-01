@@ -1,7 +1,10 @@
 ﻿using System;
 using UnityEngine;
+#if AUDIO_MANAGER_SPINE
+using Spine.Unity;
+#endif
 
-namespace Plugins.AudioManager.Runtime.Core.ControllerAudio
+namespace AudioManager.Runtime.Core.ControllerAudio
 {
 	[Serializable]
 	internal class EventsHolder
@@ -11,6 +14,10 @@ namespace Plugins.AudioManager.Runtime.Core.ControllerAudio
 
 		public string stringValue;
 		public int intValue;
+		public bool IsSkeletonAnimation;
 		public Animator animatorValue;
+#if AUDIO_MANAGER_SPINE
+		public SkeletonAnimation SkeletonAnimation;
+#endif
 	}
 }

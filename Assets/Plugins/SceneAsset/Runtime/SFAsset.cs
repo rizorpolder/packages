@@ -3,21 +3,21 @@ using UnityEngine;
 
 namespace SFAsset
 {
-    [Serializable]
-    public struct SFAsset
-    {
+	[Serializable]
+	public struct SFAsset
+	{
         /// <summary>
-        /// Returns path to asset in Project space
+        ///     Returns path to asset in Project space
         /// </summary>
         public string Path => path;
 
-        [SerializeField]
-        private string path;
+		[SerializeField]
+		private string path;
 
-        [SerializeField, HideInInspector]
-        private string guid;
+		[SerializeField] [HideInInspector]
+		private string guid;
 
-        [SerializeField, HideInInspector]
-        private string type;
-    }
+		[SerializeField] [HideInInspector]
+		private string type;
+	}
 }
