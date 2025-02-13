@@ -26,11 +26,17 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 		[SerializeField]
 		private string soundsPath;
 
+		public string SoundsPath => soundsPath;
+
 		[SerializeField]
 		private string saveDataPath;
 
+		public string SaveDataPath => saveDataPath;
+
 		[SerializeField]
 		private string tAudioPath;
+
+		public string TAudioPath => tAudioPath;
 
 		[Space(15)] [SerializeField]
 		private TextAsset audioFilesJson;
@@ -50,10 +56,10 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 		[Header("Music On Scene Start")]
 		[SerializeField]
 		private string[] metaMusic;
-
+		
 		[SerializeField]
 		private string[] coreMusic;
-
+		
 		[SerializeField]
 		private KeyValueMusicWrapper[] ambientSounds;
 
@@ -67,17 +73,11 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 		[field: SerializeField] public bool CanPlayUnfocused { get; private set; } = true;
 
 		private readonly List<string> _excludedList = new();
-		private AudioList audioList;
 		private bool isManagerAudioEnabled;
 
 		private List<SoundHolder> sounds;
 		private Dictionary<string, SoundHolder> soundsMap;
-
-		public string SoundsPath => soundsPath;
-
-		public string SaveDataPath => saveDataPath;
-
-		public string TAudioPath => tAudioPath;
+		private AudioList audioList;
 
 		public bool IfManagerAudioEnabled()
 		{
@@ -138,7 +138,7 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 		{
 			return metaMusic.GetRandom();
 		}
-
+		
 		public string GetRandomCoreMusic()
 		{
 			return coreMusic.GetRandom();
@@ -202,30 +202,32 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 			return setting.GetAudio();
 		}
 
-		public void GetAudioClip(string tAudio, Action<SettingsAudioInstance> callback)
+		public void GetAudioClip(string tAudio, System.Action<SettingsAudioInstance> callback)
 		{
-			if (string.IsNullOrEmpty(tAudio))
+			if (tAudio.IsNullOrEmpty())
 			{
 				callback(null);
 				return;
 			}
 
 			SoundHolder setting = null;
-			var count = sounds.Count;
-			for (var i = 0; i < count; i++)
-				if (sounds[i].tAudio == tAudio)
+			var count = this.sounds.Count;
+			for (int i = 0; i < count; i++)
+			{
+				if (this.sounds[i].tAudio == tAudio)
 				{
-					setting = sounds[i];
+					setting = this.sounds[i];
 					break;
 				}
+			}
 
 			if (setting == null)
 			{
 				setting = new SoundHolder {tAudio = tAudio};
-				sounds.Add(setting);
+				this.sounds.Add(setting);
 			}
 
-			var audio = setting.GetAudio();
+			SettingsAudioInstance audio = setting.GetAudio();
 			if (audio == null)
 			{
 				Debug.LogWarning("NO AUDIO FILE: " + tAudio);
@@ -251,19 +253,63 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 
 		public string GetPathToFile(string tAudio)
 		{
-			if (audioList != null)
+			if (this.audioList != null)
 			{
-				var audioName = tAudio;
+				var audioName = tAudio.ToString();
 
-				var audios = audioList.audios;
-				var count = audioList.audios.Length;
-				for (var i = 0; i < count; i++)
+				var audios = this.audioList.audios;
+				var count = this.audioList.audios.Length;
+				for (int i = 0; i < count; i++)
+				{
 					if (audios[i].name == audioName)
+					{
 						return "Settings/Audio/" + audios[i].path + "/" + audios[i].name;
+					}
+				}
 			}
 
 			return "";
 		}
+
+		#region Music
+
+		private void UpdateAudioMixerMusicVolume()
+		{
+			audioMixer.SetFloat(MusicVolumeKey, IfMusicEnabled() ? 0 : -80);
+		}
+
+		public bool IfMusicEnabled()
+		{
+			return PlayerPrefs.GetInt(MusicVolumeKey, 1) > 0;
+		}
+
+		public void SetMusicEnabledState(bool value)
+		{
+			PlayerPrefs.SetInt(MusicVolumeKey, value ? 1 : 0);
+			UpdateAudioMixerMusicVolume();
+		}
+
+		#endregion Music
+
+		#region Sound
+
+		private void UpdateAudioMixerSoundVolume()
+		{
+			audioMixer.SetFloat(SoundVolumeKey, IfSoundEnabled() ? 0 : -80);
+		}
+
+		public bool IfSoundEnabled()
+		{
+			return PlayerPrefs.GetInt(SoundVolumeKey, 1) > 0;
+		}
+
+		public void SetSoundEnabledState(bool value)
+		{
+			PlayerPrefs.SetInt(SoundVolumeKey, value ? 1 : 0);
+			UpdateAudioMixerSoundVolume();
+		}
+
+		#endregion Sound
 
 #if UNITY_EDITOR
 		[CustomEditor(typeof(ManagerAudioConfig), true)]
@@ -400,7 +446,7 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 
 					var name = Path.GetFileNameWithoutExtension(file.Name);
 
-					if (string.IsNullOrEmpty(name))
+					if (name.IsNullOrEmpty())
 						continue;
 
 					var extension = file.Extension;
@@ -418,10 +464,8 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 					directory = Path.ChangeExtension(directory, null);
 					var audio = audios.FirstOrDefault(a => a.name == name);
 					if (audio != null)
-					{
 						Debug.LogWarning(
 							$"Sound: {audio.name} already added. \r\n prev: {audio.path}  new {directory} \r\n\r\n");
-					}
 					else
 					{
 						var audioInfo = new AudioInfo
@@ -528,45 +572,5 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 			}
 		}
 #endif
-
-		#region Music
-
-		private void UpdateAudioMixerMusicVolume()
-		{
-			audioMixer.SetFloat(MusicVolumeKey, IfMusicEnabled() ? 0 : -80);
-		}
-
-		public bool IfMusicEnabled()
-		{
-			return PlayerPrefs.GetInt(MusicVolumeKey, 1) > 0;
-		}
-
-		public void SetMusicEnabledState(bool value)
-		{
-			PlayerPrefs.SetInt(MusicVolumeKey, value ? 1 : 0);
-			UpdateAudioMixerMusicVolume();
-		}
-
-		#endregion Music
-
-		#region Sound
-
-		private void UpdateAudioMixerSoundVolume()
-		{
-			audioMixer.SetFloat(SoundVolumeKey, IfSoundEnabled() ? 0 : -80);
-		}
-
-		public bool IfSoundEnabled()
-		{
-			return PlayerPrefs.GetInt(SoundVolumeKey, 1) > 0;
-		}
-
-		public void SetSoundEnabledState(bool value)
-		{
-			PlayerPrefs.SetInt(SoundVolumeKey, value ? 1 : 0);
-			UpdateAudioMixerSoundVolume();
-		}
-
-		#endregion Sound
 	}
 }

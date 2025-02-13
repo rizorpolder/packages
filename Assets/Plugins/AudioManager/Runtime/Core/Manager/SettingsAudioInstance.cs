@@ -29,7 +29,6 @@ namespace AudioManager.Runtime.Core.Manager
 		[Header("3D")]
 		[SerializeField]
 		public bool is3D;
-
 		[SerializeField]
 		public float maxDist3D;
 

@@ -6,7 +6,7 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 	internal class KeyValueMusicWrapper
 	{
 		public string key;
-
+		
 		public string[] tAudio;
 	}
 }

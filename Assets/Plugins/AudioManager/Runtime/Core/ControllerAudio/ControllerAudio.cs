@@ -1,13 +1,15 @@
-﻿#if AUDIO_MANAGER_SPINE
-using Spine.Unity;
-#endif
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AudioManager.Runtime.Core.Manager;
 using AudioManager.Runtime.Core.ManagerAudioConfig;
+using AudioManager.Runtime.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+#if AUDIO_MANAGER_SPINE
+using Spine.Unity;
+#endif
+
 #if UNITY_EDITOR
 using UnityEditor.Animations;
 using UnityEditor;
@@ -17,6 +19,17 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 {
 	public class ControllerAudio : MonoBehaviour, IPointerClickHandler
 	{
+		#pragma warning disable 0649
+		[SerializeField]
+		private ManagerAudioConfig.ManagerAudioConfig _audioConfig;
+
+		[SerializeField]
+		private EventsHolder[] events;
+
+		[SerializeField]
+		private bool isCameraZoomDependence;
+		#pragma warning restore 0649
+
 		private ManagerAudio _managerAudio;
 		private AudioSource hashAudioSource;
 
@@ -25,7 +38,6 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 		private bool isInitialized;
 		private string prevAnimationName;
 		private string prevAnimationTAudio;
-
 		private void Awake()
 		{
 			_managerAudio = ManagerAudio.SharedInstance;
@@ -34,11 +46,10 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 		private void Start()
 		{
 			var isComponentActive = false;
-			if (isCameraZoomDependence)
-			{
+			if (this.isCameraZoomDependence) {
 				isComponentActive = true;
 
-				_managerAudio.OmCameraZoomChanged += ChangeVolumeByZoom;
+				_managerAudio.OmCameraZoomChanged += this.ChangeVolumeByZoom;
 			}
 			else
 			{
@@ -146,9 +157,8 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 					_managerAudio.PlayAudioClip(gameObject, events[i].tAudio, null, 0f, true);
 		}
 
-		public bool IfCameraZoomDependence()
-		{
-			return isCameraZoomDependence;
+		public bool IfCameraZoomDependence() {
+			return this.isCameraZoomDependence;
 		}
 
 		private AudioSource GetAudioSource()
@@ -186,14 +196,9 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 				serializedObject.Update();
 
 				EditorGUILayout.Space();
-				_target._audioConfig =
-					EditorGUILayout.ObjectField("",
-						_target._audioConfig,
-						typeof(ManagerAudioConfig.ManagerAudioConfig),
-						true) as ManagerAudioConfig.ManagerAudioConfig;
+				_target._audioConfig = EditorGUILayout.ObjectField("", _target._audioConfig, typeof(ManagerAudioConfig.ManagerAudioConfig), true) as ManagerAudioConfig.ManagerAudioConfig;
 				EditorGUILayout.Space();
-				_target.isCameraZoomDependence =
-					EditorGUILayout.Toggle("Volume Camera Zoom Dependence", _target.isCameraZoomDependence);
+				_target.isCameraZoomDependence = EditorGUILayout.Toggle("Volume Camera Zoom Dependence", _target.isCameraZoomDependence);
 				EditorGUILayout.Space();
 				EditorGUILayout.Space();
 				ShowEventsArray(serializedObject.FindProperty("events"), _target);
@@ -218,13 +223,12 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 							typeof(TextAsset));
 					if (audioFilesJson is null)
 					{
-						var msg = string.IsNullOrEmpty(_target._audioConfig.SaveDataPath)
+						var msg = _target._audioConfig.SaveDataPath.IsNullOrEmpty()
 							? "AudioList.json NOT FOUND! Save Data Path is Empty!"
 							: $"Assets/{_target._audioConfig.SaveDataPath}/AudioList.json NOT FOUND";
 						Debug.Log(msg);
 						return;
 					}
-
 					var audioList = JsonUtility.FromJson<AudioList>(audioFilesJson.ToString());
 
 					var titles = new List<string>();
@@ -339,7 +343,7 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 										_event.animatorValue = (Animator) EditorGUILayout.ObjectField("Animator",
 											_event.animatorValue,
 											typeof(Animator),
-											true);
+											allowSceneObjects: true);
 
 										if (_event.animatorValue != null)
 										{
@@ -348,13 +352,13 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 
 											var animatorController =
 												_event.animatorValue.runtimeAnimatorController as AnimatorController;
-											for (var layerIndex = 0;
+											for (int layerIndex = 0;
 											     layerIndex < animatorController.layers.Length;
 											     layerIndex++)
 											{
 												var layer = animatorController.layers[layerIndex];
 												var states = layer.stateMachine.states;
-												for (var k = 0; k < states.Length; k++)
+												for (int k = 0; k < states.Length; k++)
 												{
 													animationLayersList.Add(layerIndex);
 													animationNamesList.Add(states[k].state.name);
@@ -362,14 +366,16 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 											}
 
 
-											var selectedIndex = 0;
-											for (var j = 0; j < animationNamesList.Count; j++)
+											int selectedIndex = 0;
+											for (int j = 0; j < animationNamesList.Count; j++)
+											{
 												if (_event.intValue == animationLayersList[j]
 												    && _event.stringValue == animationNamesList[j])
 												{
 													selectedIndex = j;
 													break;
 												}
+											}
 
 											selectedIndex = EditorGUILayout.Popup("Animation",
 												selectedIndex,
@@ -391,15 +397,5 @@ namespace AudioManager.Runtime.Core.ControllerAudio
 			}
 		}
 #endif
-		#pragma warning disable 0649
-		[SerializeField]
-		private ManagerAudioConfig.ManagerAudioConfig _audioConfig;
-
-		[SerializeField]
-		private EventsHolder[] events;
-
-		[SerializeField]
-		private bool isCameraZoomDependence;
-		#pragma warning restore 0649
 	}
 }

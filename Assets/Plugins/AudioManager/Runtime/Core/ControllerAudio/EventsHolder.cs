@@ -3,7 +3,6 @@ using UnityEngine;
 #if AUDIO_MANAGER_SPINE
 using Spine.Unity;
 #endif
-
 namespace AudioManager.Runtime.Core.ControllerAudio
 {
 	[Serializable]
