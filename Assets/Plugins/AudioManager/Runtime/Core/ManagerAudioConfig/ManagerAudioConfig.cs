@@ -542,16 +542,15 @@ namespace AudioManager.Runtime.Core.ManagerAudioConfig
 			private void GenerateExtensions(ManagerAudioConfig managerAudioConfig)
 			{
 				var tAudioFile = new StringBuilder();
-				tAudioFile.Append("	using AudioManager.Runtime.Core.Manager;\r\n");
+				tAudioFile.Append("using AudioManager.Runtime.Core.Manager;\r\n");
 
-				tAudioFile.Append("	namespace Plugins.AudioManager.Runtime.Core{\r\n");
-				tAudioFile.Append("	\t public static class ManagerAudioExtensions{\r\n");
-				tAudioFile.Append(
-					"	\t\t public static void PlayAudioClip(this ManagerAudio manager, TAudio audio, float delayExtra = 0){\r\n");
-				tAudioFile.Append("	\t\t\t manager.PlayAudioClip(audio.ToString(),delayExtra:delayExtra);; \r\n");
-				tAudioFile.Append("	\t\t\t}\r\n");
-				tAudioFile.Append("	\t\t}\r\n");
-				tAudioFile.Append("	\t}\r\n");
+				tAudioFile.Append("namespace Plugins.AudioManager.Runtime.Core{\r\n");
+				tAudioFile.Append("\t public static class ManagerAudioExtensions{\r\n");
+				tAudioFile.Append("\t\t public static void PlayAudioClip(this ManagerAudio manager, TAudio audio, float delayExtra = 0){\r\n");
+				tAudioFile.Append("\t\t\t manager.PlayAudioClip(audio.ToString(),delayExtra:delayExtra);; \r\n");
+				tAudioFile.Append("\t\t\t}\r\n");
+				tAudioFile.Append("\t\t}\r\n");
+				tAudioFile.Append("\t}\r\n");
 				var path = Application.dataPath + $"/{managerAudioConfig.tAudioPath}/ManagerAudioExtensions.cs";
 				File.WriteAllText(path, tAudioFile.ToString());
 			}
