@@ -7,6 +7,7 @@ namespace Plugins.Social.Telegram.Rutime
 {
 	public class TelegramSocialController : SocialManager
 	{
+		public Action<string> OnLogReceived = s => { };
 		private const string link = "https://t.me/robust_testing_bot/robust_game?startapp=ot5nyy";
 
 		public void CheckWindow()
@@ -95,6 +96,7 @@ namespace Plugins.Social.Telegram.Rutime
 		public override void ReceiveLog(string message)
 		{
 			Debug.Log("TelegramShare: " + message);
+			OnLogReceived?.Invoke(message);
 		}
 
 
