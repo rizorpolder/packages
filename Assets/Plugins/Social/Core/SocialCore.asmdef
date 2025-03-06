@@ -1,0 +1,4 @@
+{
+  "name": "SocialCore",
+  "references":[ "SocialCore" ]
+}
