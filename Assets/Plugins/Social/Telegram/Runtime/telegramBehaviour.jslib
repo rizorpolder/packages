@@ -1,4 +1,4 @@
-var TGMiniAppGameSDKProvider = {
+mergeInto(LibraryManager.library,{
 CheckWindowType: function (){
          if (window.Telegram)
          {
@@ -111,6 +111,4 @@ OpenTelegramInvoice: function (invoicePayloadPtr) {
             console.log("Telegram WebApp not detected.");
         }
     }
-};
-
-mergeInto(LibraryManager.library, TGMiniAppGameSDKProvider);
+});
