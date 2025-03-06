@@ -2,17 +2,17 @@ var TGMiniAppGameSDKProvider = {
 CheckWindowType: function (){
          if (window.Telegram)
          {
-            unityLog("THATS TELEGRAM");
+            unityInstance.SendMessage("TelegramController", "ReceiveLog", "is Telegram");
          }
 
          if (window.Telegram.WebApp)
          {
-            unityLog("THATS WEB");
+            unityInstance.SendMessage("TelegramController", "ReceiveLog", "is Web app telegram");
          }
 
           if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
           {
-             unityLog("THATS MOBILE");
+             unityInstance.SendMessage("TelegramController", "ReceiveLog", "is mobile Telegram");
           }
 },
 
