@@ -2,5 +2,8 @@
   "name": "com.rizorpolder.plugins.social.tg",
   "version": "1.0.0",
   "displayName": "Telegram Social",
-  "description": "Referrals and Links "
+  "description": "Referrals and Links ",
+  "dependencies": {
+    "com.rizorpolder.plugins.social.core" : "1.0.0"
+  }
 }
