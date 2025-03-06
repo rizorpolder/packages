@@ -8,6 +8,12 @@ namespace Plugins.Social.Telegram.Rutime
 	public class TelegramSocialController : SocialManager
 	{
 		private const string link = "https://t.me/robust_testing_bot/robust_game?startapp=ot5nyy";
+
+		public void CheckWindow()
+		{
+			CheckWindowType();
+		}
+
 		public void Share(System.Action callback)
 		{
 			// Call the share method with the specified message and URL
