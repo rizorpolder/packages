@@ -6,7 +6,7 @@ ShareOnTelegram: function (messagePtr, urlPtr) {
         function unityLog(message) {
             console.log(message);
             if (typeof myGameInstance !== "undefined") {
-                //myGameInstance.SendMessage("TelegramController", "ReceiveLog", message);
+                //myGameInstance.SendMessage("TelegramSocialManager", "ReceiveLog", message);
             }
         }
 
@@ -24,14 +24,14 @@ ShareOnTelegram: function (messagePtr, urlPtr) {
             } catch (error) {
                 unityLog("Error using Telegram WebApp sharing: " + error);
             }
+            myGameInstance.SendMessage("TelegramSocialManager", "ReceiveLog", "Share Complete");
+            //window.Telegram.WebApp.onEvent('shareMessageSent',function(){
+            //                myGameInstance.SendMessage("TelegramSocialManager", "ReceiveLog", "Share Complete");
+            //               });
+            //window.Telegram.WebApp.onEvent('shareMessageFailed',function(){
+            //                 myGameInstance.SendMessage("TelegramSocialManager", "ReceiveLog", "Share Failed");
+            //                });
 
-             window.Telegram.WebApp.onEvent('shareMessageSent',function(){
-                             myGameInstance.SendMessage("TelegramController", "ReceiveLog", "Share Complete");
-                            });
-
-            window.Telegram.WebApp.onEvent('shareMessageFailed',function(){
-                             myGameInstance.SendMessage("TelegramController", "ReceiveLog", "Share Failed");
-                            });
         } else if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             // Detect mobile environment and attempt to open the Telegram app
             unityLog("Detected mobile environment, attempting to open Telegram app");
@@ -56,7 +56,7 @@ ShareOnTelegram: function (messagePtr, urlPtr) {
         function unityLog(message) {
             //console.log(message);
             if (typeof myGameInstance !== "undefined") {
-            //    myGameInstance.SendMessage("TelegramShare", "ReceiveLog", message);
+            //    myGameInstance.SendMessage("TelegramSocialManager", "ReceiveLog", message);
             }
         }
 
@@ -98,10 +98,10 @@ OpenTelegramInvoice: function (invoicePayloadPtr) {
                 WebApp.onEvent('invoiceClosed', function(object) {
                   if (object.status == 'paid') {
                     WebApp.close();
-                    myGameInstance.SendMessage("TelegramController", "OnPurchaseProduct");
+                    myGameInstance.SendMessage("TelegramSocialManager", "OnPurchaseProduct");
 
                   } else if (object.status == 'failed') {
-                    myGameInstance.SendMessage("TelegramController", "OnPurchaseFailed");
+                    myGameInstance.SendMessage("TelegramSocialManager", "OnPurchaseFailed");
                     WebApp.showAlert("Failed");
                   }
                 });
