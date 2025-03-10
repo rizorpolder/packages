@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using Plugins.Social.Core.Runtime;
 using UnityEngine;
 
-namespace Plugins.PlayDeck.Runtime.Social
+namespace PlayDeck.Runtime.Social
 {
 	public class PlayDeckSocial : ASocialManager
 	{
@@ -45,7 +45,6 @@ namespace Plugins.PlayDeck.Runtime.Social
 
 		private void GetShareLinkHandler(string shareLink)
 		{
-
 		}
 
 		//Only for PlayDeck
