@@ -1,17 +1,17 @@
 using System;
-using System.Runtime.InteropServices;
 using Ads.Core.Runtime;
 using Ads.Core.Runtime.AdStatus;
+using PlayDeck.Runtime.Ads;
 using UnityEngine;
 
 namespace Plugins.PlayDeck.Runtime.Ads
 {
-	public class PlayDeckBridgeAds : AdsController<GamePlacements>
+	public class PlayDeckAds<TEnum> : AdsController<TEnum> where TEnum : Enum
 	{
 		private bool _adInProgress;
 		public override bool AdInProgress => _adInProgress;
 
-		private GamePlacements _currentPlacement;
+		private TEnum _currentPlacement;
 
 		protected override void Initialize(string sdkKey, string playerId, bool ageRestrictedFlag)
 		{
@@ -22,27 +22,27 @@ namespace Plugins.PlayDeck.Runtime.Ads
 			return true;
 		}
 
-		public override AdStatus InitializeAdForPlacement(GamePlacements placement)
+		public override AdStatus InitializeAdForPlacement(TEnum placement)
 		{
 			return SetStatusForPlacement(placement, AdStatusValue.Ready);
 		}
 
-		public override bool IsRewardedAdReady(GamePlacements placement)
+		public override bool IsRewardedAdReady(TEnum placement)
 		{
 			return true;
 		}
 
-		public override void PreloadRewardedAd(GamePlacements placement)
+		public override void PreloadRewardedAd(TEnum placement)
 		{
 		}
 
-		public override void ShowRewardedAd(GamePlacements placement)
+		public override void ShowRewardedAd(TEnum placement)
 		{
 			AudioListener.volume = 0;
 			AudioListener.pause = true;
 			_adInProgress = true;
 			_currentPlacement = placement;
-//#if UNITY_WEBGL
+#if UNITY_WEBGL
 			if (Application.isEditor)
 			{
 				OnRewardedVideoClosed();
@@ -50,10 +50,10 @@ namespace Plugins.PlayDeck.Runtime.Ads
 			}
 			else
 			{
-				PlayDeckBridge_PostMessage_ShowAd();
+				PlayDeckAdsProxy.PlayDeckBridge_PostMessage_ShowAd();
 			}
 
-//endif
+#endif
 		}
 
 		private void AdHandled()
@@ -105,17 +105,17 @@ namespace Plugins.PlayDeck.Runtime.Ads
 			throw new NotImplementedException();
 		}
 
-		public override void ShowBanner(GamePlacements placement)
+		public override void ShowBanner(TEnum placement)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void HideBanner(GamePlacements placement)
+		public override void HideBanner(TEnum placement)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void DestroyBanner(GamePlacements placement)
+		public override void DestroyBanner(TEnum placement)
 		{
 			throw new NotImplementedException();
 		}
@@ -124,50 +124,18 @@ namespace Plugins.PlayDeck.Runtime.Ads
 
 		#region Interstitials
 
-		public override void PreloadInterstitial(GamePlacements placement)
+		public override void PreloadInterstitial(TEnum placement)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void ShowInterstitialAd(GamePlacements placement)
+		public override void ShowInterstitialAd(TEnum placement)
 		{
 			throw new NotImplementedException();
 		}
 
 		#endregion
 
-		//called from js
-		public void RewardedAdHandler(string data)
-		{
-			OnRewardedVideoWatched();
-		}
 
-		//called from js
-
-		public void ErrAdHandler(string data)
-		{
-			OnRewardedVideoFailed();
-		}
-
-		//called from js
-
-		public void SkipAdHandler(string data)
-		{
-			OnRewardedVideoClosed();
-		}
-
-		//called from js
-		private void NotFoundAdHandler(string data)
-		{
-			OnRewardedVideoFailed();
-		}
-
-		//called from js
-		private void StartAdHandler(string data)
-		{
-		}
-
-		[DllImport("__Internal")]
-		private static extern void PlayDeckBridge_PostMessage_ShowAd();
 	}
 }

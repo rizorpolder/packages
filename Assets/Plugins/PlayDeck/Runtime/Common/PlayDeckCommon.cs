@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Plugins.PlayDeck.Runtime.Common
 {
-	public class PlayDeckCommon
+	public class PlayDeckCommon : MonoBehaviour
 	{
 		private const string GET_USER_PROFILE = "getUserProfile";
 

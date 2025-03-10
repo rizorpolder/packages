@@ -131,13 +131,5 @@ mergeInto(LibraryManager.library, {
       { playdeck: { method: "sendAnalytics", value: jsonData } },
       "*"
     );
-  },
-
-  PlayDeckBridge_PostMessage_ShowAd: function() {
-    const parent = window.parent.window;
-    parent.postMessage(
-      { playdeck: { method: "showAd" } },
-      "*"
-    );
   }
 });
