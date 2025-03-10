@@ -5,7 +5,7 @@ using Analytics.Core.Runtime;
 using Analytics.Core.Runtime.Interfaces;
 using UnityEngine;
 
-namespace Plugins.PlayDeck.Runtime.Analytics
+namespace PlayDeck.Runtime.Analytics
 {
 	public class PlayDeckAnalytics : IAnalytics
 	{
