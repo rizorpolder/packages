@@ -2,7 +2,7 @@
     "name": "com.rizorpolder.ads.playdeck",
     "rootNamespace": "",
     "references": [
-        "com.rizorpolder.ads.core",
+        "com.rizorpolder.ads.core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

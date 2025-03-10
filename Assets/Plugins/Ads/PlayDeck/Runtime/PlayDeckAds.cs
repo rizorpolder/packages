@@ -1,10 +1,9 @@
 using System;
 using Ads.Core.Runtime;
 using Ads.Core.Runtime.AdStatus;
-using PlayDeck.Runtime.Ads;
 using UnityEngine;
 
-namespace Plugins.PlayDeck.Runtime.Ads
+namespace PlayDeck.Runtime.Ads
 {
 	public class PlayDeckAds<TEnum> : AdsController<TEnum> where TEnum : Enum
 	{
