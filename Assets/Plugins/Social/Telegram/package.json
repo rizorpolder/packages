@@ -1,5 +1,5 @@
 {
-  "name": "com.rizorpolder.plugins.social.tg",
+  "name": "com.rizorpolder.social.tg",
   "version": "1.0.0",
   "displayName": "Telegram Social",
   "description": "Referrals and Sharing ",
@@ -8,6 +8,6 @@
     "email": "rizorpolder@gmail.com"
   },
   "dependencies": {
-    "com.rizorpolder.plugins.social.core" : "1.0.0"
+    "com.rizorpolder.plugins.social.core" : "https://github.com/rizorpolder/packages.git?path=Assets/Plugins/Social/Core"
   }
 }

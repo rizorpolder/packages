@@ -1,5 +1,5 @@
 {
-  "name": "com.rizorpolder.plugins.ads.core",
+  "name": "com.rizorpolder.ads.core",
   "version": "1.0.0",
   "displayName": "Ads Core",
   "description": "Base logic for ads",

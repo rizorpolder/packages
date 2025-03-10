@@ -1,5 +1,5 @@
 {
-  "name": "com.rizorpolder.plugins.analytics.core",
+  "name": "com.rizorpolder.analytics.core",
   "version": "1.0.0",
   "displayName": "Analytics Core",
   "description": "Base logic for analytics",
