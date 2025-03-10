@@ -59,8 +59,6 @@ mergeInto(LibraryManager.library, {
     );
   },
 
-  ,
-
   PlayDeckBridge_PostMessage_GetPlaydeckState: function() {
     const parent = window.parent.window;
     parent.postMessage(
