@@ -8,6 +8,6 @@
     "email": "rizorpolder@gmail.com"
   },
   "dependencies": {
-    "com.rizorpolder.plugins.social.core" : "https://github.com/rizorpolder/packages.git?path=Assets/Plugins/Social/Core"
+    "com.rizorpolder.social.core" : "https://github.com/rizorpolder/packages.git?path=Assets/Plugins/Social/Core"
   }
 }
