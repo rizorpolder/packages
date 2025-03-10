@@ -8,12 +8,25 @@ namespace Plugins.Social.Core.Runtime
 		protected System.Action onFailedAction;
 
 		public bool IsAvailable { get; }
-		public abstract void Share(string message, string url,System.Action onSuccess = null, System.Action onFailed = null);
+
+		public abstract void Share(string message,
+			string url,
+			System.Action onSuccess = null,
+			System.Action onFailed = null);
 
 		public abstract void OpenSocialChannel(string channelName);
 
-		public abstract void OnActionComplete();
-		public abstract void OnActionFailed();
+		protected virtual void OnActionComplete()
+		{
+			onSuccessAction?.Invoke();
+		}
+
+		protected virtual void OnActionFailed()
+		{
+			onFailedAction?.Invoke();
+		}
+
+		public abstract void GetShareLink(string link);
 
 		public abstract void ReceiveLog(string message);
 	}

@@ -7,6 +7,8 @@ namespace Analytics.Core.Runtime
 		Firebase,
 		AppsFlyer,
 		GameAnalytics,
-		FirebaseWebgl
+		FirebaseWebgl,
+		PlayDeck,
+
 	}
 }

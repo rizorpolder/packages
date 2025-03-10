@@ -1,5 +1,5 @@
 {
-    "name": "AdsCore",
+    "name": "com.rizorpolder.ads.core",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],

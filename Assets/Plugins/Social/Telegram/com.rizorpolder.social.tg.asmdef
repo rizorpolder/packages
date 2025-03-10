@@ -1,7 +1,9 @@
 {
-    "name": "TelegramSocial",
+    "name": "com.rizorpolder.social.tg",
     "rootNamespace": "",
-    "references": ["SocialCore"],
+    "references": [
+        "com.rizorpolder.social.core"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

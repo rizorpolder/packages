@@ -27,15 +27,22 @@ namespace Plugins.Social.Telegram.Rutime
 		}
 
 		// This method will be called from JS
-		public override void OnActionComplete()
+		protected override void OnActionComplete()
 		{
-			onSuccessAction?.Invoke();
+			Debug.Log("On Share Complete");
+			base.OnActionComplete();
 		}
 
 		// This method will be called from JS
-		public override void OnActionFailed()
+		protected override void OnActionFailed()
 		{
-			onFailedAction?.Invoke();
+			Debug.Log("On Share Failed");
+			base.OnActionFailed();
+		}
+
+		public override void GetShareLink(string link)
+		{
+			throw new NotImplementedException();
 		}
 
 		// This method will be called from JS

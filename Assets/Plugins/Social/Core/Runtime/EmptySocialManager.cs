@@ -19,14 +19,8 @@ namespace Plugins.Social.Core.Runtime
 
 		}
 
-		public override void OnActionComplete()
+		public override void GetShareLink(string link)
 		{
-			onSuccessAction?.Invoke();
-		}
-
-		public override void OnActionFailed()
-		{
-			onFailedAction?.Invoke();
 		}
 
 		public override void ReceiveLog(string message)

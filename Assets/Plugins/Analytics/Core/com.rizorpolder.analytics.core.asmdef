@@ -1,5 +1,5 @@
 {
-    "name": "AnalyticsCore",
+    "name": "com.rizorpolder.analytics.core",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
