@@ -54,7 +54,8 @@ namespace PlayDeck.Runtime.Analytics
 
 		private string ToJson(AnalyticsEvent parameters)
 		{
-			return Unity.Plastic.Newtonsoft.Json.JsonConvert.SerializeObject(parameters);
+			return JsonUtility.ToJson(parameters);
+			//return JsonConvert.SerializeObject(parameters);
 		}
 
 		//For PlayDeck only

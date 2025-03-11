@@ -40,7 +40,8 @@ namespace PlayDeck.Runtime.Social
 
 		private string ToJson(ShareItem parameters)
 		{
-			return Unity.Plastic.Newtonsoft.Json.JsonConvert.SerializeObject(parameters);
+			return JsonUtility.ToJson(parameters);
+			// return JsonConvert.SerializeObject(parameters);
 		}
 
 		private void GetShareLinkHandler(string shareLink)
