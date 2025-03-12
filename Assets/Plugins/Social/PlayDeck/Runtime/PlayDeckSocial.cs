@@ -7,6 +7,15 @@ namespace PlayDeck.Runtime.Social
 {
 	public class PlayDeckSocial : ASocialManager
 	{
+		private bool _isInitialized = false;
+
+		public override bool IsInitialized() => _isInitialized;
+
+		public override void Initialize()
+		{
+			_isInitialized = true;
+		}
+
 		public override void Share(string message, string url, Action onSuccess = null, Action onFailed = null)
 		{
 			onSuccessAction = onSuccess;

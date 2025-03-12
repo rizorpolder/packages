@@ -7,6 +7,15 @@ namespace Plugins.Social.Telegram.Rutime
 {
 	public class TelegramSocialManager : ASocialManager
 	{
+		public override bool IsInitialized()
+		{
+			return true;
+		}
+
+		public override void Initialize()
+		{
+		}
+
 		public override void Share(string message, string url, Action onSuccess = null, Action onFailed = null)
 		{
 			onSuccessAction = onSuccess;

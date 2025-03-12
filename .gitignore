@@ -25,3 +25,4 @@ UserSettings/EditorUserSettings.asset
 *.csproj
 UserSettings
 *.sln
+obj

@@ -5,6 +5,14 @@ namespace Plugins.Social.Core.Runtime
 {
 	public class EmptySocialManager : ASocialManager
 	{
+		public override bool IsInitialized()
+		{
+			return true;
+		}
+
+		public override void Initialize()
+		{
+		}
 
 		public override void Share(string message, string url, Action onSuccess = null, Action onFailed = null)
 		{

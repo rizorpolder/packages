@@ -7,7 +7,8 @@ namespace Plugins.Social.Core.Runtime
 		protected System.Action onSuccessAction;
 		protected System.Action onFailedAction;
 
-		public bool IsAvailable { get; }
+		public abstract bool IsInitialized();
+		public abstract void Initialize();
 
 		public abstract void Share(string message,
 			string url,

@@ -10,15 +10,13 @@ namespace PlayDeck.Runtime.Analytics
 	public class PlayDeckAnalytics : IAnalytics
 	{
 		public AnalyticType Type => AnalyticType.PlayDeck;
-
+		private bool _isInitialized;
 		public void Initialize()
 		{
+			_isInitialized = true;
 		}
 
-		public bool IsInitialized()
-		{
-			return true;
-		}
+		public bool IsInitialized() => _isInitialized;
 
 		public void SendEvent(string eventName, Dictionary<string, object> param = null)
 		{

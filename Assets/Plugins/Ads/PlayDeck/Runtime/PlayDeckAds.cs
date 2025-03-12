@@ -11,15 +11,13 @@ namespace PlayDeck.Runtime.Ads
 		public override bool AdInProgress => _adInProgress;
 
 		private TEnum _currentPlacement;
-
+		private bool _isInitialized;
 		protected override void Initialize(string sdkKey, string playerId, bool ageRestrictedFlag)
 		{
+			_adInProgress = true;
 		}
 
-		public override bool IsInitialized()
-		{
-			return true;
-		}
+		public override bool IsInitialized() => _isInitialized;
 
 		public override AdStatus InitializeAdForPlacement(TEnum placement)
 		{
