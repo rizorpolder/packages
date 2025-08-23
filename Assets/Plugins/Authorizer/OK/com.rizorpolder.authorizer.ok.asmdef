@@ -1,7 +1,9 @@
 {
-    "name": "com.rizorpolder.authorizer",
+    "name": "com.rizorpolder.authorizer.ok",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "com.rizorpolder.authorizer.core"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

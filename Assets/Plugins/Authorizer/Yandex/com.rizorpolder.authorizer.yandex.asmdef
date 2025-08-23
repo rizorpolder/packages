@@ -1,8 +1,8 @@
 {
-    "name": "com.rizorpolder.authorizer.ok",
+    "name": "com.rizorpolder.authorizer.yandex",
     "rootNamespace": "",
     "references": [
-        "GUID:75fd025b7f097684c8307661c7ad80df"
+        "com.rizorpolder.authorizer.core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,10 +1,14 @@
 {
-  "name": "com.rizorpolder.authorizers",
+  "name": "com.rizorpolder.authorizer.core",
   "version": "1.0.0",
-  "displayName": "Authorizer_Core",
+  "displayName": "Authorizer Core",
   "description": "Core part of authorize logic for different platforms",
   "author": {
     "name": "rizorpolder",
     "email": "rizorpolder@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rizorpolder/packages.git"
   }
 }

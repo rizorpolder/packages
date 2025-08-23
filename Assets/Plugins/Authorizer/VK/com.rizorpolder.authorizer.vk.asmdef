@@ -1,7 +1,9 @@
 {
-    "name": "com.rizorpolder.authorizer.yandex",
+    "name": "com.rizorpolder.authorizer.vk",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "com.rizorpolder.authorizer.core"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

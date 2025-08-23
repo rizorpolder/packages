@@ -7,7 +7,11 @@
     "name": "rizorpolder",
     "email": "rizorpolder@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rizorpolder/packages.git"
+  },
   "dependencies": {
-    "com.rizorpolder.authorizer" : "1.0.0"
+    "com.rizorpolder.authorizer.core" : "1.0.0"
   }
 }
