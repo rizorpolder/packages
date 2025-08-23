@@ -1,8 +1,8 @@
 {
-    "name": "com.rizorpolder.authorizer.yandex",
+    "name": "com.rizorpolder.platform.core",
     "rootNamespace": "",
     "references": [
-        "com.rizorpolder.authorizer.core"
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

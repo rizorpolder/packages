@@ -1,8 +1,8 @@
 {
-  "name": "com.rizorpolder.authorizer.yandex",
+  "name": "com.rizorpolder.platform.vk",
   "version": "1.0.0",
-  "displayName": "Yandex WebGL Authorizer",
-  "description": "Logic of authorization with yandex",
+  "displayName": "VK WebGL Authorizer",
+  "description": "Logic of authorization with VK",
   "author": {
     "name": "rizorpolder",
     "email": "rizorpolder@gmail.com"
@@ -12,6 +12,6 @@
     "url": "git@github.com:rizorpolder/packages.git"
   },
   "dependencies": {
-    "com.rizorpolder.authorizer.core": "1.0.0"
+    "com.rizorpolder.platform.core": "1.0.0"
   }
 }
