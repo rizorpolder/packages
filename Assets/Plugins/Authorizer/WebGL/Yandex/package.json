@@ -1,0 +1,13 @@
+{
+  "name": "com.rizorpolder.core.authorizer.yandex",
+  "version": "1.0.0",
+  "displayName": "Yandex WebGL Authorizer",
+  "description": "Logic of authorization with yandex",
+  "author": {
+    "name": "rizorpolder",
+    "email": "rizorpolder@gmail.com"
+  },
+  "dependencies": {
+    "com.rizorpolder.authorizer" : "1.0.0"
+  }
+}

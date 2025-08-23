@@ -1,0 +1,13 @@
+{
+  "name": "com.rizorpolder.authorizer.vk",
+  "version": "1.0.0",
+  "displayName": "VK WebGL Authorizer",
+  "description": "Logic of authorization with VK",
+  "author": {
+    "name": "rizorpolder",
+    "email": "rizorpolder@gmail.com"
+  },
+  "dependencies": {
+    "com.rizorpolder.authorizer" : "1.0.0"
+  }
+}

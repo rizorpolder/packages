@@ -1,0 +1,16 @@
+{
+    "name": "com.rizorpolder.authorizer.ok",
+    "rootNamespace": "",
+    "references": [
+        "GUID:75fd025b7f097684c8307661c7ad80df"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

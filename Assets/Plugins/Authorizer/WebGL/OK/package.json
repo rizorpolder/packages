@@ -1,0 +1,13 @@
+{
+  "name": "com.rizorpolder.authorizer.ok",
+  "version": "1.0.0",
+  "displayName": "OK WebGL Authorizer",
+  "description": "Logic of authorization with OK",
+  "author": {
+    "name": "rizorpolder",
+    "email": "rizorpolder@gmail.com"
+  },
+  "dependencies": {
+    "com.rizorpolder.authorizer" : "1.0.0"
+  }
+}

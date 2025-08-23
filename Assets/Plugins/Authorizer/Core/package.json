@@ -1,0 +1,10 @@
+{
+  "name": "com.rizorpolder.authorizers",
+  "version": "1.0.0",
+  "displayName": "Authorizer_Core",
+  "description": "Core part of authorize logic for different platforms",
+  "author": {
+    "name": "rizorpolder",
+    "email": "rizorpolder@gmail.com"
+  }
+}
