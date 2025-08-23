@@ -2,7 +2,9 @@
     "name": "com.rizorpolder.platform.vk",
     "rootNamespace": "",
     "references": [
-        "com.rizorpolder.platform.core"
+        "com.rizorpolder.platform.core",
+        "UniTask"
+
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

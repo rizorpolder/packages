@@ -1,18 +1,21 @@
 using System.Runtime.InteropServices;
 using Cysharp.Threading.Tasks;
-using Plugins.Authorizer.Core;
+using Authorizer.Core;
 using UnityEngine;
 
 namespace PlatformController.WebGL.Yandex
 {
-	public class YandexPlatformController : IAuthorizer
+	public class YandexPlatformController : AAuthorizer
 	{
-		private readonly UniTaskCompletionSource<string> _promise = new UniTaskCompletionSource<string>();
-
-		public UniTask<string> Authorize()
+		public override UniTask<string> Authorize()
 		{
 			AuthorizeInternal();
 			return _promise.Task;
+		}
+
+		public override void ShowLoginWindow()
+		{
+			ShowLoginWindowInternal();
 		}
 
 		#region GameReady
@@ -57,13 +60,13 @@ namespace PlatformController.WebGL.Yandex
 
 		#region JSLIB Callbacks
 
-		public void OnAuthorized(string signature)
+		public override void OnAuthorized(string signature)
 		{
 			Debug.Log("Auth: YandexAuthorizer OnAuthorized");
 			_promise.TrySetResult(signature);
 		}
 
-		public void OnSuccessLogin()
+		public override void OnSuccessLogin()
 		{
 			// var authorizer = Context.Network.Auth;
 			// if (!authorizer.IsAuthorized)
